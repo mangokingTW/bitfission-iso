@@ -2,12 +2,12 @@
 
 set -e -u
 
-iso_name=archlinux
+iso_name=ARCH_BitFission
 iso_label="ARCH_$(date +%Y%m)"
-iso_version=$(date +%Y.%m.%d)
+iso_version="0"
 install_dir=arch
 work_dir=work
-out_dir=out
+out_dir=~/ISO
 gpg_key=
 
 arch=$(uname -m)
