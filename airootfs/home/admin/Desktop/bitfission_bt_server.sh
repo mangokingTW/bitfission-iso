@@ -1,4 +1,9 @@
 #!/usr/bin/bash -eu
+echo "Select NIC for dhcpd and tftpd"
+ls /sys/class/net/
+read NIC
+sed -i.bak s/_NIC_/${NIS}/g /etc/dnsmasq.conf
+systemctl start dnsmasq
 
 echo "Type the NFS server IP address or hostname: "
 read nfsip
