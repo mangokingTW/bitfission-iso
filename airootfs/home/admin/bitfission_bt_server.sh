@@ -1,8 +1,34 @@
 #!/usr/bin/bash -eu
-echo "Select NIC for dhcpd and tftpd"
+echo "Select NIC for dhcpd and tftpd: "
 ls /sys/class/net/
 read NIC
-sed -i.bak s/_NIC_/${NIS}/g /etc/dnsmasq.conf
+
+echo "Static IP address e.g. 10.3.24.1: "
+read ipaddr
+
+echo "Netmask e.g. 24: "
+read netmask
+
+echo "broadcast e.g. 10.3.24.255: "
+read broadcast
+
+echo "Default gateway e.g. 10.3.24.254: "
+read gateway
+
+ip link set $NIC up
+ip addr add $ipaddr/$netmask broadcast $broadcast dev $NIC
+ip route add default via $gateway
+
+echo "DHCP ip begin e.g. 10.3.24.10:"
+read begin
+
+echo "DHCP ip end e.g. 10.3.24.250:"
+read end
+
+sed -i.bak s/_NIC_/${NIC}/g /etc/dnsmasq.conf
+sed -i.bak s/_BEGIN_/${begin}/g /etc/dnsmasq.conf
+sed -i.bak s/_END_/${end}/g /etc/dnsmasq.conf
+sed -i.bak s/_GATEWAY_/${gateway}/g /etc/dnsmasq.conf
 systemctl start dnsmasq
 
 echo "Type the NFS server IP address or hostname: "
@@ -27,10 +53,11 @@ while [ 1 ] ; do
 	for part in ${partitions}; do
 		mkdir -p /tmp/bitfission/${disk}/${part}/
 		cp /mnt/${imgpath}/${disk}/${part}.torrent /srv/tftp/ezio/${disk}/${part}.torrent
+		transmission-edit -a "http://${ipaddr}:6969/announce" /srv/tftp/ezio/${disk}/${part}.torrent
 		mount -t squashfs /mnt/${imgpath}/${disk}/${part}.img /tmp/bitfission/${disk}/${part}/
 		offset="$( partclone.info /tmp/bitfission/${disk}/${part}/image.img 2>/dev/null | cut -d ' ' -f4 )"
 		if [[ -z "${offset}" ]] ; then offset="0" ; fi
-		echo "${offset} /tmp/bitfission/${disk}/${part}/image.img /mnt/${imgpath}/${disk}/${part}.torrent" >> torrent.list
+		echo "${offset} /tmp/bitfission/${disk}/${part}/image.img /srv/tftp/ezio/${disk}/${part}.torrent" >> torrent.list
 	done
 
 	echo "Do you want to clone another disk? (y/N)"
@@ -41,5 +68,7 @@ while [ 1 ] ; do
 done
 
 ./create_ezio_config.sh
-
+chmod a+r -R /srv/tftp/ezio/
+killall -p opentracker || echo "No existing tracker service, starting..."
+opentracker &
 bt_server -l torrent.list

@@ -14,8 +14,8 @@ chmod 700 /root
 ! id admin && useradd -m -p "" -g users -G "adm,audio,log,network,rfkill,scanner,storage,optical,power,wheel" -s /usr/bin/zsh admin
 cp -aT /etc/skel/ /home/admin
 chown -R admin:users /home/admin
-chown -R root:users /home/admin/Desktop/*.sh
-chmod u+s /home/admin/Desktop/*.sh
+chown -R root:users /home/admin/*.sh
+chmod u+s /home/admin/*.sh
 chmod 700 /home/admin
 
 sed -i 's/#\(PermitRootLogin \).\+/\1yes/' /etc/ssh/sshd_config
