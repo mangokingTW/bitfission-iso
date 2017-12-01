@@ -8,3 +8,5 @@ dolphin
 nfs-utils
 libtorrent-rasterbar
 boost
+squashfs-tools
+transmission-cli
