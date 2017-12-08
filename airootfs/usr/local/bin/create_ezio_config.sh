@@ -10,20 +10,17 @@ tftpfile=$( find /srv/tftp/ezio/ \( -name \*.torrent -o -name \*partition_table 
 partinfo=""
 ezioinfo=""
 for file in $tftpfile ; do
-	rfile=$( echo $file | cut -d'/' -f4- )
-	lfile=$( echo $file | cut -d'/' -f6- )
+	rfile=$( echo "$file" | cut -d'/' -f4- )
+	lfile=$( echo "$file" | cut -d'/' -f6- )
 	echo "busybox tftp -g -l $lfile -r $rfile \$TFTP" >> /srv/tftp/ezio/ezio.sh
-	if [ -n "$(echo $lfile | grep partition_table)" ] ; then
-		disk=$(echo $lfile | cut -d'_' -f1)
+	if echo "$lfile" | grep -q partition_table ; then
+		disk=$(echo "$lfile" | cut -d'_' -f1)
 		partinfo="${partinfo}dd if=$lfile of=/dev/$disk"$'\n'
 	fi
-	if [ -n "$(echo $lfile | grep torrent)" ] ; then
-		part=$(echo $lfile | cut -d'.' -f1)
+	if echo "$lfile" | grep -q torrent ; then
+		part=$(echo "$lfile" | cut -d'.' -f1)
 		ezioinfo="${ezioinfo}static-ezio $lfile /dev/$part"$'\n'
 	fi
 done
 
-echo "$partinfo" >> /srv/tftp/ezio/ezio.sh
-echo "$ezioinfo" >> /srv/tftp/ezio/ezio.sh
-
-echo "poweroff" >> /srv/tftp/ezio/ezio.sh
+{ echo "$partinfo"; echo "$ezioinfo"; echo "poweroff -f"; } >> /srv/tftp/ezio/ezio.sh
