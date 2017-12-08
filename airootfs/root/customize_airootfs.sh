@@ -14,9 +14,8 @@ chmod 700 /root
 ! id admin && useradd -m -p "" -g users -G "adm,audio,log,network,rfkill,scanner,storage,optical,power,wheel" -s /usr/bin/zsh admin
 cp -aT /etc/skel/ /home/admin
 chown -R admin:users /home/admin
-chown -R root:users /home/admin/*.sh
-chmod u+s /home/admin/*.sh
-chmod 700 /home/admin
+chown -R root:users /usr/local/bin/
+chmod u+s /usr/local/bin/*
 
 sed -i 's/#\(PermitRootLogin \).\+/\1yes/' /etc/ssh/sshd_config
 sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
