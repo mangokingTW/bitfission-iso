@@ -9,15 +9,19 @@ read ipaddr
 echo "Netmask e.g. 24: "
 read netmask
 
+echo "MTU size e.g. 1500: "
+read mtu
+
 echo "broadcast e.g. 10.3.24.255: "
 read broadcast
 
 echo "Default gateway e.g. 10.3.24.254: "
 read gateway
 
-ip link set $NIC up
-ip addr add $ipaddr/$netmask broadcast $broadcast dev $NIC
-ip route add default via $gateway
+ip link set ${NIC} mtu ${mtu}
+ip link set ${NIC} up
+ip addr add ${ipaddr}/${netmask} broadcast ${broadcast} dev ${NIC}
+ip route add default via ${gateway}
 
 echo "DHCP ip begin e.g. 10.3.24.10:"
 read begin
@@ -67,7 +71,7 @@ while [ 1 ] ; do
 	fi
 done
 
-./create_ezio_config.sh
+create_ezio_config.sh
 chmod a+r -R /srv/tftp/ezio/
 killall -p opentracker || echo "No existing tracker service, starting..."
 opentracker &
