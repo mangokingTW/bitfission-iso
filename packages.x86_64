@@ -1,10 +1,10 @@
-xorg-server
-xorg-xinit
-plasma
+#xorg-server
+#xorg-xinit
+#plasma
 dnsmasq
 darkhttpd
-konsole
-dolphin
+#konsole
+#dolphin
 nfs-utils
 libtorrent-rasterbar
 boost
