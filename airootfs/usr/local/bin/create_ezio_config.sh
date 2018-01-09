@@ -19,7 +19,7 @@ for file in $tftpfile ; do
 	fi
 	if echo "$lfile" | grep -q torrent ; then
 		part=$(echo "$lfile" | cut -d'.' -f1)
-		ezioinfo="${ezioinfo}static-ezio $lfile /dev/$part"$'\n'
+		ezioinfo="${ezioinfo}static-ezio -s $lfile /dev/$part"$'\n'
 	fi
 done
 
