@@ -1,0 +1,15 @@
+UI vesamenu.c32
+TIMEOUT 300
+DISPLAY ./boot.msg
+MENU TITLE Welcome to Phd.ate's EZIO
+MENU BACKGROUND splash.png
+LABEL ezio
+  MENU LABEL Boot from EZIO Server for disk cloning
+  MENU DEFAULT
+  LINUX http://_HTTP_/kernel/linux
+  INITRD http://_HTTP_/kernel/initrd.img
+  sysappend 2
+LABEL local
+  MENU LABEL Boot from local drive
+  localboot 0
+
