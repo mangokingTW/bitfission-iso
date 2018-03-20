@@ -39,7 +39,7 @@ ntp
 #openconnect
 openssh
 #openvpn
-partclone
+#partclone
 parted
 partimage
 #ppp
