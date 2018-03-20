@@ -31,7 +31,8 @@ while true ; do
 	fi
 	mkdir -p /tmp/bitfission/"${disk}"
 	mkdir -p /srv/tftp/ezio/"${disk}"
-	cp "${fullpath}"/"${disk}"/partition_table /srv/tftp/ezio/"${disk}"/"${disk}"_partition_table
+	cp "${fullpath}"/"${disk}"/partition_table.dd /srv/tftp/ezio/"${disk}"/"${disk}"_partition_table.dd
+	cp "${fullpath}"/"${disk}"/partition_table.sgdisk /srv/tftp/ezio/"${disk}"/"${disk}"_partition_table.sgdisk
 
 	partitions=$( find "${fullpath}"/"${disk}"/ -name "*.img" | sed -e 's/.*\/\(.*\)\.img/\1/' )
 	for part in ${partitions}; do
