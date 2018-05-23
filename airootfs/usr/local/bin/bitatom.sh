@@ -18,14 +18,14 @@ echo "Type target disk e.g. sda : "
 	#sfdisk -d /dev/${disk} > /mnt/${imgpath}/${disk}/partition_table
 	ptype=$(parted /dev/${disk} print | grep "Partition Table:" | cut -d' ' -f 3)
 	if [ "${ptype}" == "gpt" ] ; then
-		pnum=$(parted -ms /dev/sda print | tail -1| cut -b1)
-		gptsize=$(( ${pnum}*128 + 1024 ))
-		dd if=/dev/${disk} of=/mnt/${imgpath}/${disk}/partition_table.dd bs=1 count=${gptsize}
+		#pnum=$(parted -ms /dev/sda print | tail -1| cut -b1)
+		#gptsize=$(( ${pnum}*128 + 1024 ))
+		#dd if=/dev/${disk} of=/mnt/${imgpath}/${disk}/partition_table.dd bs=1 count=${gptsize}
+		sgdisk --backup=/mnt/${imgpath}/${disk}/partition_table.sgdisk /dev/${disk}
 	else
 		dd if=/dev/${disk} of=/mnt/${imgpath}/${disk}/partition_table.dd bs=1 count=512
 	fi
 
-	sgdisk --backup=/mnt/${imgpath}/${disk}/partition_table.sgdisk /dev/${disk}
 
 	partitions=$(sfdisk -d /dev/${disk} | grep -e '^/dev/' | cut -d' ' -f1)
 

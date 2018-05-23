@@ -16,9 +16,9 @@ for file in $tftpfile ; do
 	if echo "$lfile" | grep -q partition_table.sgdisk ; then
 		disk=$(echo "$lfile" | cut -d'_' -f1)
 		partinfo="${partinfo}sgdisk --load-backup=$lfile /dev/$disk"$'\n'
-	#elif echo "$lfile" | grep -q partition_table.dd ; then
-	#	disk=$(echo "$lfile" | cut -d'_' -f1)
-	#	partinfo="${partinfo}dd if=$lfile of=/dev/$disk"$'\n'
+	elif echo "$lfile" | grep -q partition_table.dd ; then
+		disk=$(echo "$lfile" | cut -d'_' -f1)
+		partinfo="${partinfo}dd if=$lfile of=/dev/$disk"$'\n'
 	fi
 	if echo "$lfile" | grep -q torrent ; then
 		part=$(echo "$lfile" | cut -d'.' -f1)
