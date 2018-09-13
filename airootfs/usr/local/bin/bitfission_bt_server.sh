@@ -52,4 +52,4 @@ create_ezio_config.sh
 chmod a+r -R /srv/tftp/ezio/
 killall -p opentracker &>/dev/null || true
 opentracker &
-bt_server -l torrent.list
+bt_server -a 3 -c 3 -u 3 -l torrent.list
