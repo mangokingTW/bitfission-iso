@@ -3,6 +3,8 @@
 mkdir -p /srv/tftp/ezio/
 
 echo "#!/bin/sh -e" > /srv/tftp/ezio/ezio.sh
+# Prevent the machine which memory less than 4G trigger OOM
+echo "sysctl vm.overcommit_memory=1" > /srv/tftp/ezio/ezio.sh
 echo "TFTP=\$(cat /tftp)" >> /srv/tftp/ezio/ezio.sh
 
 tftpfile=$( find /srv/tftp/ezio/ \( -name \*.torrent -o -name \*partition_table\* \) -print | sort )
@@ -22,7 +24,7 @@ for file in $tftpfile ; do
 	fi
 	if echo "$lfile" | grep -q torrent ; then
 		part=$(echo "$lfile" | cut -d'.' -f1)
-		ezioinfo="${ezioinfo}static-ezio -s $lfile /dev/$part"$'\n'
+		ezioinfo="${ezioinfo}static-ezio -m 2 -c 3 $lfile /dev/$part"$'\n'
 	fi
 done
 
