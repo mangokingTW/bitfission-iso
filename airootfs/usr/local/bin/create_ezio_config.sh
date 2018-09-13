@@ -17,7 +17,7 @@ for file in $tftpfile ; do
 	echo "busybox tftp -g -l $lfile -r $rfile \$TFTP" >> /srv/tftp/ezio/ezio.sh
 	if echo "$lfile" | grep -q partition_table.sgdisk ; then
 		disk=$(echo "$lfile" | cut -d'_' -f1)
-		partinfo="${partinfo}sgdisk --load-backup=$lfile /dev/$disk"$'\n'
+		partinfo="${partinfo}sgdisk -g --load-backup=$lfile /dev/$disk"$'\n'
 	elif echo "$lfile" | grep -q partition_table.dd ; then
 		disk=$(echo "$lfile" | cut -d'_' -f1)
 		partinfo="${partinfo}dd if=$lfile of=/dev/$disk"$'\n'
